@@ -16,7 +16,7 @@ use cgmath;
 use cgmath::{FixedArray};
 use glium;
 use glium::{Surface};
-use {JamkitGraphics, JamkitTexture};
+use {Graphics, Texture};
 
 #[derive(Copy, Clone)]
 struct Vertex {
@@ -26,14 +26,14 @@ struct Vertex {
 
 implement_vertex!(Vertex, position, tex_coords);
 
-pub struct JamkitFrame<'a> {
-    graphics: &'a JamkitGraphics,
+pub struct Frame<'a> {
+    graphics: &'a Graphics,
     viewport_matrix: [[f32; 4]; 4],
     frame: glium::Frame
 }
 
-impl<'a> JamkitFrame<'a> {
-    pub fn start(graphics: &JamkitGraphics) -> JamkitFrame {
+impl<'a> Frame<'a> {
+    pub fn start(graphics: &Graphics) -> Frame {
         // Clear our frame so we don't have lingering data
         let mut frame = graphics.glium_display().draw();
         frame.clear_color(0.0, 0.0, 0.0, 1.0);
@@ -45,14 +45,14 @@ impl<'a> JamkitFrame<'a> {
             h as f32, 0.0,
             1.0, -1.0).into_fixed();
 
-        JamkitFrame {
+        Frame {
             graphics: graphics,
             frame: frame,
             viewport_matrix: matrix
         }
     }
 
-    pub fn draw(&mut self, texture: &JamkitTexture, src: Option<[i32; 4]>, destination: [i32; 4]) {
+    pub fn draw(&mut self, texture: &Texture, src: Option<[i32; 4]>, destination: [i32; 4]) {
         // Calculate this quad's vertices
         let src = get_texcords(texture, src);
         let dest = [destination[0] as f32, destination[1] as f32, destination[2] as f32, destination[3] as f32];
@@ -85,7 +85,7 @@ impl<'a> JamkitFrame<'a> {
     }
 }
 
-fn get_texcords(texture: &JamkitTexture, src: Option<[i32; 4]>) -> [f32; 4] {
+fn get_texcords(texture: &Texture, src: Option<[i32; 4]>) -> [f32; 4] {
     match src {
         Some(val) => {
             let (w, h) = texture.get_dimensions();

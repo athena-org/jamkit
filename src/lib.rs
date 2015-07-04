@@ -21,6 +21,6 @@ mod frame;
 mod graphics;
 mod texture;
 
-pub use frame::{JamkitFrame};
-pub use graphics::{JamkitGraphics};
-pub use texture::{JamkitTexture};
+pub use frame::{Frame};
+pub use graphics::{Graphics, Event};
+pub use texture::{Texture};

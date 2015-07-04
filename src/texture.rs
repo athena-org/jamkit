@@ -15,18 +15,18 @@
 use std::path::{Path};
 use glium::texture::{Texture2d};
 use image;
-use {JamkitGraphics};
+use {Graphics};
 
-pub struct JamkitTexture {
+pub struct Texture {
     texture: Texture2d
 }
 
-impl JamkitTexture {
-    pub fn load(graphics: &JamkitGraphics, path: &str) -> JamkitTexture {
+impl Texture {
+    pub fn load(graphics: &Graphics, path: &str) -> Texture {
         let image = image::open(&Path::new(path)).unwrap();
         let texture = Texture2d::new(graphics.glium_display(), image);
 
-        JamkitTexture {
+        Texture {
             texture: texture
         }
     }

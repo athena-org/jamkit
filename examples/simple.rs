@@ -14,16 +14,19 @@
 
 extern crate jamkit;
 
-use jamkit::{JamkitGraphics, JamkitFrame, JamkitTexture};
-
 fn main() {
-    let mut display = JamkitGraphics::init();
-    let test_texture = JamkitTexture::load(&display, "examples/test.png");
+    let mut display = jamkit::Graphics::init();
+    let test_texture = jamkit::Texture::load(&display, "examples/test.png");
 
-    while !display.is_closed() {
-        display.poll_events();
+    'main: loop {
+        for event in display.poll_events() {
+            match event {
+                jamkit::Event::Closed => break 'main,
+                _ => ()
+            }
+        }
 
-        let mut frame = JamkitFrame::start(&display);
+        let mut frame = jamkit::Frame::start(&display);
         frame.draw(&test_texture, None, [0, 0, 200, 200]);
         frame.draw(&test_texture, Some([50, 50, 150, 150]), [50, 250, 150, 350]);
         frame.finish();

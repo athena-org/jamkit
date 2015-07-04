@@ -16,14 +16,13 @@ use glium;
 use glium::{DisplayBuild};
 use glium::backend::glutin_backend::GlutinFacade;
 
-pub struct JamkitGraphics {
+pub struct Graphics {
     display: GlutinFacade,
-    program: glium::Program,
-    is_closed: bool
+    program: glium::Program
 }
 
-impl JamkitGraphics {
-    pub fn init() -> JamkitGraphics {
+impl Graphics {
+    pub fn init() -> Graphics {
         let display = glium::glutin::WindowBuilder::new()
             .build_glium().unwrap();
 
@@ -32,23 +31,15 @@ impl JamkitGraphics {
             include_str!("shaders/vertex.glsl"), include_str!("shaders/fragment.glsl"),
             None).unwrap();
 
-        JamkitGraphics {
+        Graphics {
             display: display,
-            program: program,
-            is_closed: false
+            program: program
         }
     }
 
-    pub fn is_closed(&self) -> bool {
-        self.is_closed
-    }
-
-    pub fn poll_events(&mut self) {
-        for ev in self.display.poll_events() {
-            match ev {
-                glium::glutin::Event::Closed => self.is_closed = true,
-                _ => ()
-            }
+    pub fn poll_events(&mut self) -> PollEventsIter {
+        PollEventsIter {
+            iter: self.display.poll_events()
         }
     }
 
@@ -58,5 +49,32 @@ impl JamkitGraphics {
 
     pub fn glium_program(&self) -> &glium::Program {
         &self.program
+    }
+}
+
+#[derive(Debug)]
+pub enum Event {
+    Closed,
+    Unknown
+}
+
+pub struct PollEventsIter<'a> {
+    iter: glium::backend::glutin_backend::PollEventsIter<'a>
+}
+
+impl<'a> Iterator for PollEventsIter<'a> {
+    type Item = Event;
+
+    fn next(&mut self) -> Option<Event> {
+        if let Some(event) = self.iter.next() {
+            let retev = match event {
+                glium::glutin::Event::Closed => Event::Closed,
+                _ => Event::Unknown
+            };
+
+            Some(retev)
+        } else {
+            None
+        }
     }
 }
