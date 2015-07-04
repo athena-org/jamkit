@@ -53,8 +53,57 @@ impl Graphics {
 }
 
 #[derive(Debug)]
+pub enum KeyState {
+    Pressed,
+    Released
+}
+
+impl KeyState {
+    pub fn is_pressed(&self) -> bool {
+        match *self {
+            KeyState::Pressed => true,
+            KeyState::Released => false
+        }
+    }
+
+    pub fn is_released(&self) -> bool {
+        !self.is_pressed()
+    }
+}
+
+fn map_state(state: glium::glutin::ElementState) -> KeyState {
+    match state {
+        glium::glutin::ElementState::Pressed => KeyState::Pressed,
+        glium::glutin::ElementState::Released => KeyState::Released
+    }
+}
+
+#[derive(Debug)]
+pub enum Key {
+    A, D, S, W,
+    Unknown
+}
+
+fn map_key(key_o: Option<glium::glutin::VirtualKeyCode>) -> Key {
+    use glium::glutin::VirtualKeyCode as Gvkc;
+
+    if let Some(key) = key_o {
+        match key {
+            Gvkc::A => Key::A,
+            Gvkc::D => Key::D,
+            Gvkc::S => Key::S,
+            Gvkc::W => Key::W,
+            _ => Key::Unknown
+        }
+    } else {
+        Key::Unknown
+    }
+}
+
+#[derive(Debug)]
 pub enum Event {
     Closed,
+    KeyboardInput(KeyState, Key),
     Unknown
 }
 
@@ -66,9 +115,12 @@ impl<'a> Iterator for PollEventsIter<'a> {
     type Item = Event;
 
     fn next(&mut self) -> Option<Event> {
+        use glium::glutin::Event as GliumEvent;
+
         if let Some(event) = self.iter.next() {
             let retev = match event {
-                glium::glutin::Event::Closed => Event::Closed,
+                GliumEvent::Closed => Event::Closed,
+                GliumEvent::KeyboardInput(state, _, key) => Event::KeyboardInput(map_state(state), map_key(key)),
                 _ => Event::Unknown
             };
 
