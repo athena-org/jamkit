@@ -1,7 +1,9 @@
 [package]
 name = "jamkit"
 version = "0.1.0"
+description = "A small game development library."
 authors = ["Layl Conway"]
+license = "Apache-2.0"
 
 [dependencies]
 cgmath = "0.2.0"
