@@ -6,6 +6,6 @@ authors = ["Layl Conway"]
 license = "Apache-2.0"
 
 [dependencies]
-cgmath = "0.2.0"
-glium = "0.6.6"
-image = "0.3.11"
+cgmath = "0.2"
+glium = "0.6"
+image = "0.3"
