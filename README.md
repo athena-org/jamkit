@@ -1,4 +1,4 @@
-# Phosphorus
+# Jamkit
 
 A small game development library.
 
