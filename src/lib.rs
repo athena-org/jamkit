@@ -21,6 +21,6 @@ mod frame;
 mod graphics;
 mod texture;
 
-pub use frame::{Frame};
+pub use frame::{DrawData, Frame};
 pub use graphics::{Event, Graphics, Key, KeyState};
 pub use texture::{Texture};
