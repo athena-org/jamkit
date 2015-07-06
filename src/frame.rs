@@ -52,21 +52,34 @@ impl<'a> Frame<'a> {
         }
     }
 
-    pub fn draw(&mut self, texture: &Texture, src: Option<[i32; 4]>, destination: [i32; 4]) {
-        // Calculate this quad's vertices
-        let src = get_texcords(texture, src);
-        let dest = [destination[0] as f32, destination[1] as f32, destination[2] as f32, destination[3] as f32];
-        let shape = vec![
-            Vertex {position: [dest[0], dest[1]], tex_coords: [src[0], src[3]]},
-            Vertex {position: [dest[0], dest[3]], tex_coords: [src[0], src[1]]},
-            Vertex {position: [dest[2], dest[1]], tex_coords: [src[2], src[3]]},
+    pub fn get_dimensions(&self) -> (u32, u32) {
+        self.frame.get_dimensions()
+    }
 
-            Vertex {position: [dest[2], dest[3]], tex_coords: [src[2], src[1]]},
-            Vertex {position: [dest[2], dest[1]], tex_coords: [src[2], src[3]]},
-            Vertex {position: [dest[0], dest[3]], tex_coords: [src[1], src[1]]}
-        ];
+    pub fn draw(&mut self, texture: &Texture, source: Option<[i32; 4]>, destination: [i32; 4]) {
+        self.draw_many(texture, &vec![DrawData{source: source, destination: destination}]);
+    }
 
-        let vertex_buffer = glium::VertexBuffer::new(self.graphics.glium_display(), shape);
+    pub fn draw_many(&mut self, texture: &Texture, data: &[DrawData]) {
+        let mut vertices = Vec::<Vertex>::new();
+
+        for entry in data {
+            // Calculate this quad's vertices
+            let src = get_texcords(texture, entry.source);
+            let dest = [
+                entry.destination[0] as f32, entry.destination[1] as f32,
+                entry.destination[2] as f32, entry.destination[3] as f32];
+
+            vertices.push(Vertex {position: [dest[0], dest[1]], tex_coords: [src[0], src[3]]});
+            vertices.push(Vertex {position: [dest[0], dest[3]], tex_coords: [src[0], src[1]]});
+            vertices.push(Vertex {position: [dest[2], dest[1]], tex_coords: [src[2], src[3]]});
+
+            vertices.push(Vertex {position: [dest[2], dest[3]], tex_coords: [src[2], src[1]]});
+            vertices.push(Vertex {position: [dest[2], dest[1]], tex_coords: [src[2], src[3]]});
+            vertices.push(Vertex {position: [dest[0], dest[3]], tex_coords: [src[1], src[1]]});
+        }
+
+        let vertex_buffer = glium::VertexBuffer::dynamic(self.graphics.glium_display(), vertices);
         let indices = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
 
         let uniforms = uniform! {
@@ -83,6 +96,11 @@ impl<'a> Frame<'a> {
     pub fn finish(self) {
         self.frame.finish().unwrap();
     }
+}
+
+pub struct DrawData {
+    pub source: Option<[i32; 4]>,
+    pub destination: [i32; 4]
 }
 
 fn get_texcords(texture: &Texture, src: Option<[i32; 4]>) -> [f32; 4] {
