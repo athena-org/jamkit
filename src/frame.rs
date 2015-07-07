@@ -84,7 +84,8 @@ impl<'a> Frame<'a> {
 
         let uniforms = uniform! {
             matrix: self.viewport_matrix.clone(),
-            tex: texture.glium_texture(),
+            tex: texture.glium_texture().sampled()
+                .magnify_filter(glium::uniforms::MagnifySamplerFilter::Nearest)
         };
 
         self.frame.draw(

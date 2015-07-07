@@ -22,8 +22,10 @@ pub struct Graphics {
 }
 
 impl Graphics {
-    pub fn init() -> Graphics {
+    pub fn init(title: &str, width: u32, height: u32) -> Graphics {
         let display = glium::glutin::WindowBuilder::new()
+            .with_title(String::from(title))
+            .with_dimensions(width, height)
             .build_glium().unwrap();
 
         let program = glium::Program::from_source(
