@@ -27,7 +27,7 @@ impl Texture {
         let texture = Texture2d::new(graphics.glium_display(), image);
 
         Texture {
-            texture: texture
+            texture: texture,
         }
     }
 
