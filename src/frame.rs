@@ -76,7 +76,7 @@ impl<'a> Frame<'a> {
 
             vertices.push(Vertex {position: [dest[2], dest[3]], tex_coords: [src[2], src[1]]});
             vertices.push(Vertex {position: [dest[2], dest[1]], tex_coords: [src[2], src[3]]});
-            vertices.push(Vertex {position: [dest[0], dest[3]], tex_coords: [src[1], src[1]]});
+            vertices.push(Vertex {position: [dest[0], dest[3]], tex_coords: [src[0], src[1]]});
         }
 
         let vertex_buffer = glium::VertexBuffer::dynamic(self.graphics.glium_display(), vertices);
