@@ -15,7 +15,7 @@
 extern crate jamkit;
 
 fn main() {
-    let mut display = jamkit::Graphics::init();
+    let mut display = jamkit::Graphics::init("test", 640, 480);
     let test_texture = jamkit::Texture::load(&display, "examples/test.png");
 
     let mut x = 0;
