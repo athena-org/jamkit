@@ -82,7 +82,7 @@ fn map_state(state: glium::glutin::ElementState) -> KeyState {
 
 #[derive(Debug)]
 pub enum Key {
-    A, D, S, W,
+    A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
     Unknown
 }
 
@@ -92,9 +92,31 @@ fn map_key(key_o: Option<glium::glutin::VirtualKeyCode>) -> Key {
     if let Some(key) = key_o {
         match key {
             Gvkc::A => Key::A,
+            Gvkc::B => Key::B,
+            Gvkc::C => Key::C,
             Gvkc::D => Key::D,
+            Gvkc::E => Key::E,
+            Gvkc::F => Key::F,
+            Gvkc::G => Key::G,
+            Gvkc::H => Key::H,
+            Gvkc::I => Key::I,
+            Gvkc::J => Key::J,
+            Gvkc::K => Key::K,
+            Gvkc::L => Key::L,
+            Gvkc::M => Key::M,
+            Gvkc::N => Key::N,
+            Gvkc::O => Key::O,
+            Gvkc::P => Key::P,
+            Gvkc::Q => Key::Q,
+            Gvkc::R => Key::R,
             Gvkc::S => Key::S,
+            Gvkc::T => Key::T,
+            Gvkc::U => Key::U,
+            Gvkc::V => Key::V,
             Gvkc::W => Key::W,
+            Gvkc::X => Key::X,
+            Gvkc::Y => Key::Y,
+            Gvkc::Z => Key::Z,
             _ => Key::Unknown
         }
     } else {

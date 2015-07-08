@@ -1,6 +1,6 @@
 [package]
 name = "jamkit"
-version = "0.2.0"
+version = "0.2.1"
 description = "A small game development library."
 homepage = "https://github.com/athena-org/jamkit"
 repository = "https://github.com/athena-org/jamkit"
