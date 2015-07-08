@@ -1,9 +1,19 @@
-# Jamkit
+<h1>
+    Jamkit
+        <span style="float:right">
+        <a href="https://travis-ci.org/athena-org/jamkit">
+            <img src="https://img.shields.io/travis/athena-org/jamkit/master.svg?style=flat-square" alt="Build Status">
+        </a>
+        <a href="https://crates.io/crates/jamkit">
+            <img src="http://meritbadge.herokuapp.com/gfx?style=flat-square" alt="crates.io">
+        </a>
+    </span>
+</h1>
 
 A small game development library.
 
 ```Rust
-let mut display = jamkit::Graphics::init();
+let mut display = jamkit::Graphics::init("test", 640, 480);
 let test_texture = jamkit::Texture::load(&display, "examples/test.png");
 
 let mut x = 0;
@@ -24,3 +34,8 @@ let mut x = 0;
     frame.finish();
 }
 ```
+
+## Contributing
+
+When creating a pull request, make sure you merge into the develop branch. The
+master branch mirrors the latest crates.io release.
