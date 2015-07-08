@@ -1,13 +1,7 @@
 <h1>
     Jamkit
-        <span style="float:right">
-        <a href="https://travis-ci.org/athena-org/jamkit">
-            <img src="https://img.shields.io/travis/athena-org/jamkit/master.svg?style=flat-square" alt="Build Status">
-        </a>
-        <a href="https://crates.io/crates/jamkit">
-            <img src="http://meritbadge.herokuapp.com/gfx?style=flat-square" alt="crates.io">
-        </a>
-    </span>
+    [![Build Status](https://img.shields.io/travis/athena-org/jamkit/master.svg?style=flat-square)](https://travis-ci.org/athena-org/jamkit)
+    [![crates.io](http://meritbadge.herokuapp.com/jamkit?style=flat-square)](https://crates.io/crates/jamkit)
 </h1>
 
 A small game development library.
