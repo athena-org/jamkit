@@ -18,17 +18,37 @@ fn main() {
     let mut display = jamkit::Graphics::init("test", 640, 480);
     let test_texture = jamkit::Texture::load(&display, "examples/test.png");
 
+    let mut timer = jamkit::utils::DeterminismTimer::at_interval(10);
+    let mut a_state = false;
+    let mut d_state = false;
     let mut x = 0;
 
     'main: loop {
         for event in display.poll_events() {
             match event {
                 jamkit::Event::Closed => break 'main,
-                jamkit::Event::KeyboardInput(state, _) =>
-                    if state.is_pressed() { x += 5; },
-                _ => ()
+                jamkit::Event::KeyboardInput(state, key) =>
+                    if state.is_pressed() {
+                        match key {
+                            jamkit::Key::A => a_state = true,
+                            jamkit::Key::D => d_state = true,
+                            _ => {}
+                        }
+                    } else {
+                        match key {
+                            jamkit::Key::A => a_state = false,
+                            jamkit::Key::D => d_state = false,
+                            _ => {}
+                        }
+                    },
+                _ => {}
             }
         }
+
+        timer.update(&mut |_| {
+            if a_state && !d_state { x -= 1; }
+            if d_state && !a_state { x += 1; }
+        });
 
         let mut frame = jamkit::Frame::start(&display);
         frame.draw(&test_texture, None, [0, 0, 200, 200]);

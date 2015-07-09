@@ -1,6 +1,6 @@
 [package]
 name = "jamkit"
-version = "0.2.1"
+version = "0.2.2"
 description = "A small game development library."
 homepage = "https://github.com/athena-org/jamkit"
 repository = "https://github.com/athena-org/jamkit"
@@ -11,3 +11,4 @@ license = "Apache-2.0"
 cgmath = "0.2"
 glium = "0.6"
 image = "0.3"
+time = "0.1.30"
