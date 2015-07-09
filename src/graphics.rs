@@ -16,12 +16,15 @@ use glium;
 use glium::{DisplayBuild};
 use glium::backend::glutin_backend::GlutinFacade;
 
+/// Represents a graphics context for Jamkit to draw into.
 pub struct Graphics {
+    // TODO: Consider renaming
     display: GlutinFacade,
     program: glium::Program
 }
 
 impl Graphics {
+    /// Initializes a new `Graphics` object with given values.
     pub fn init(title: &str, width: u32, height: u32) -> Graphics {
         let display = glium::glutin::WindowBuilder::new()
             .with_title(String::from(title))
@@ -39,6 +42,7 @@ impl Graphics {
         }
     }
 
+    /// Returns an iterator that polls for the next event in the window's events queue.
     pub fn poll_events(&mut self) -> PollEventsIter {
         PollEventsIter {
             iter: self.display.poll_events()
