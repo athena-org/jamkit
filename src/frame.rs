@@ -16,6 +16,7 @@ use cgmath;
 use cgmath::{FixedArray};
 use glium;
 use glium::{Surface};
+use glium::draw_parameters::{BlendingFunction, LinearBlendingFactor};
 use {Graphics, Texture};
 
 #[derive(Copy, Clone)]
@@ -88,10 +89,20 @@ impl<'a> Frame<'a> {
                 .magnify_filter(glium::uniforms::MagnifySamplerFilter::Nearest)
         };
 
+        let params = glium::DrawParameters {
+            blending_function: Some(
+                BlendingFunction::Addition {
+                    source: LinearBlendingFactor::SourceAlpha,
+                    destination: LinearBlendingFactor::OneMinusSourceAlpha
+                }
+            ),
+            .. Default::default()
+        };
+
         self.frame.draw(
             &vertex_buffer, &indices,
             self.graphics.glium_program(),
-            &uniforms, &Default::default()).unwrap();
+            &uniforms, &params).unwrap();
     }
 
     pub fn finish(self) {
