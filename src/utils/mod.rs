@@ -13,6 +13,7 @@
 // limitations under the License.
 
 use time::{Duration, SteadyTime};
+use {Key, KeyState};
 
 pub struct DeterminismTimer {
     elapsed: Duration,
@@ -37,6 +38,32 @@ impl DeterminismTimer {
         while self.elapsed > self.target {
             self.elapsed = self.elapsed - self.target;
             tick_closure(self.target.clone());
+        }
+    }
+}
+
+pub struct InputState {
+    lookup: Vec<KeyState>
+}
+
+impl InputState {
+    pub fn new() -> InputState {
+        InputState {
+            lookup: (0..Key::Unknown as usize).map(|_| KeyState::Released).collect()
+        }
+    }
+
+    pub fn process_keyboard(&mut self, state: &KeyState, key: &Key) {
+        if let &Key::Unknown = key { return; }
+
+        self.lookup[key.clone() as usize] = state.clone();
+    }
+
+    pub fn get(&self, key: Key) -> KeyState {
+        if let Key::Unknown = key {
+            KeyState::Released
+        } else {
+            self.lookup[key as usize].clone()
         }
     }
 }

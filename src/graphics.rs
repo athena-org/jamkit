@@ -58,7 +58,7 @@ impl Graphics {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum KeyState {
     Pressed,
     Released
@@ -84,10 +84,10 @@ fn map_state(state: glium::glutin::ElementState) -> KeyState {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Key {
     A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
-    Unknown
+    Unknown // <= Must be last
 }
 
 fn map_key(key_o: Option<glium::glutin::VirtualKeyCode>) -> Key {

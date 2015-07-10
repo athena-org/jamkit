@@ -14,40 +14,31 @@
 
 extern crate jamkit;
 
+use jamkit::{Key};
+use jamkit::utils::{DeterminismTimer, InputState};
+
 fn main() {
     let mut display = jamkit::Graphics::init("test", 640, 480);
     let test_texture = jamkit::Texture::load(&display, "examples/test.png");
 
-    let mut timer = jamkit::utils::DeterminismTimer::at_interval(10);
-    let mut a_state = false;
-    let mut d_state = false;
+    let mut input = InputState::new();
     let mut x = 0;
 
+    let mut timer = DeterminismTimer::at_interval(10);
     'main: loop {
         for event in display.poll_events() {
             match event {
                 jamkit::Event::Closed => break 'main,
-                jamkit::Event::KeyboardInput(state, key) =>
-                    if state.is_pressed() {
-                        match key {
-                            jamkit::Key::A => a_state = true,
-                            jamkit::Key::D => d_state = true,
-                            _ => {}
-                        }
-                    } else {
-                        match key {
-                            jamkit::Key::A => a_state = false,
-                            jamkit::Key::D => d_state = false,
-                            _ => {}
-                        }
-                    },
+                jamkit::Event::KeyboardInput(state, key) => input.process_keyboard(&state, &key),
                 _ => {}
             }
         }
 
         timer.update(&mut |_| {
-            if a_state && !d_state { x -= 1; }
-            if d_state && !a_state { x += 1; }
+            let a = input.get(Key::A);
+            let d = input.get(Key::D);
+            if a.is_pressed() && d.is_released() { x -= 1; }
+            if d.is_pressed() && a.is_released() { x += 1; }
         });
 
         let mut frame = jamkit::Frame::start(&display);
