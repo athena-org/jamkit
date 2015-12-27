@@ -1,22 +1,22 @@
 use time::{Duration, SteadyTime};
 use {Key, KeyState};
 
-pub struct DeterminismTimer {
+pub struct TickTimer {
     elapsed: Duration,
     target: Duration,
     last_tick: SteadyTime
 }
 
-impl DeterminismTimer {
+impl TickTimer {
     pub fn at_interval(milliseconds: i64) -> Self {
-        DeterminismTimer {
+        TickTimer {
             elapsed: Duration::zero(),
             target: Duration::milliseconds(milliseconds),
             last_tick: SteadyTime::now()
         }
     }
 
-    pub fn update(&mut self, tick_closure: &mut FnMut(Duration)) {
+    pub fn update<F: FnMut(Duration)>(&mut self, mut tick_closure: F) {
         let new_tick = SteadyTime::now();
         self.elapsed = self.elapsed + (new_tick - self.last_tick);
         self.last_tick = new_tick;

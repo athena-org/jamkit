@@ -1,7 +1,7 @@
 extern crate jamkit;
 
 use jamkit::{Key};
-use jamkit::utils::{DeterminismTimer, InputState};
+use jamkit::utils::{TickTimer, InputState};
 
 fn main() {
     let mut display = jamkit::Graphics::init("test", 640, 480);
@@ -10,7 +10,7 @@ fn main() {
     let mut input = InputState::new();
     let mut x = 0;
 
-    let mut timer = DeterminismTimer::at_interval(10);
+    let mut timer = TickTimer::at_interval(10);
     'main: loop {
         for event in display.poll_events() {
             match event {
@@ -20,7 +20,7 @@ fn main() {
             }
         }
 
-        timer.update(&mut |_| {
+        timer.update(|_| {
             let a = input.get(Key::A);
             let d = input.get(Key::D);
             if a.is_pressed() && d.is_released() { x -= 1; }

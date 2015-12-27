@@ -8,7 +8,7 @@ authors = ["Layl Conway"]
 license = "MIT"
 
 [dependencies]
-cgmath = "0.4.0"
-glium = "0.13.2"
-image = "0.3.9" # Use what glium uses
-time = "0.1.33"
+cgmath = "0.7"
+glium = "0.13"
+image = "0.6"
+time = "0.1"
