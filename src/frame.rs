@@ -12,6 +12,7 @@ struct Vertex {
 
 implement_vertex!(Vertex, position, tex_coords);
 
+/// A single frame to be displayed on-screen. Contains functions for drawing to that frame.
 pub struct Frame<'a> {
     graphics: &'a Graphics,
     viewport_matrix: [[f32; 4]; 4],
@@ -19,6 +20,7 @@ pub struct Frame<'a> {
 }
 
 impl<'a> Frame<'a> {
+    /// Starts a new frame for the jamkit target.
     pub fn start(graphics: &Graphics) -> Frame {
         // Clear our frame so we don't have lingering data
         let mut frame = graphics.glium_display().draw();
@@ -42,16 +44,19 @@ impl<'a> Frame<'a> {
         self.frame.get_dimensions()
     }
 
+    /// Draws the source rectangle in the texture on the frame as the destination rectangle.
+    /// If None is provided for source, the full texture is drawn.
     pub fn draw(&mut self, texture: &Texture, source: Option<[i32; 4]>, destination: [i32; 4]) {
         self.draw_many(texture, &vec![DrawData{source: source, destination: destination}]);
     }
 
+    /// Performs the same action as `draw`, but many in a batched call.
     pub fn draw_many(&mut self, texture: &Texture, data: &[DrawData]) {
         let mut vertices = Vec::<Vertex>::new();
 
         for entry in data {
             // Calculate this quad's vertices
-            let src = get_texcords(texture, entry.source);
+            let src = get_texcoords(texture, entry.source);
             let dest = [
                 entry.destination[0] as f32, entry.destination[1] as f32,
                 entry.destination[2] as f32, entry.destination[3] as f32];
@@ -93,23 +98,25 @@ impl<'a> Frame<'a> {
         ).unwrap();
     }
 
+    /// Finishes this frame, causing the back-buffer to be flipped. This may block for vsync.
     pub fn finish(self) {
         self.frame.finish().unwrap();
     }
 }
 
+/// A source-destination combination for use in `draw_many`.
 pub struct DrawData {
     pub source: Option<[i32; 4]>,
     pub destination: [i32; 4]
 }
 
-fn get_texcords(texture: &Texture, src: Option<[i32; 4]>) -> [f32; 4] {
+fn get_texcoords(texture: &Texture, src: Option<[i32; 4]>) -> [f32; 4] {
     match src {
         Some(val) => {
-            let (w, h) = texture.get_dimensions();
+            let size = texture.get_dimensions();
 
-            [val[0] as f32 / w as f32, val[1] as f32 / h as f32,
-             val[2] as f32 / w as f32, val[3] as f32 / h as f32]
+            [val[0] as f32 / size[0] as f32, val[1] as f32 / size[1] as f32,
+             val[2] as f32 / size[0] as f32, val[3] as f32 / size[1] as f32]
         },
         None => [0.0, 0.0, 1.0, 1.0]
     }

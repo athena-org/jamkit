@@ -3,6 +3,7 @@ use glium::texture::{SrgbTexture2d, RawImage2d};
 use image;
 use {Graphics};
 
+/// A texture loaded for use in drawing.
 pub struct Texture {
     texture: SrgbTexture2d
 }
@@ -19,8 +20,9 @@ impl Texture {
         }
     }
 
-    pub fn get_dimensions(&self) -> (u32, u32) {
-        (self.texture.get_width(), self.texture.get_height().unwrap())
+    /// Gets the dimensions of the texture in pixels.
+    pub fn get_dimensions(&self) -> [u32; 2] {
+        [self.texture.get_width(), self.texture.get_height().unwrap()]
     }
 
     pub fn glium_texture(&self) -> &SrgbTexture2d {
