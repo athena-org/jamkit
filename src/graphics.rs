@@ -131,16 +131,12 @@ impl<'a> Iterator for PollEventsIter<'a> {
     fn next(&mut self) -> Option<Event> {
         use glium::glutin::Event as GliumEvent;
 
-        if let Some(event) = self.iter.next() {
-            let retev = match event {
+        self.iter.next().map(|event| {
+            match event {
                 GliumEvent::Closed => Event::Closed,
                 GliumEvent::KeyboardInput(state, _, key) => Event::KeyboardInput(map_state(state), map_key(key)),
                 _ => Event::Unknown
-            };
-
-            Some(retev)
-        } else {
-            None
-        }
+            }
+        })
     }
 }

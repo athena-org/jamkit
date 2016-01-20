@@ -35,7 +35,7 @@ pub struct InputState {
 impl InputState {
     pub fn new() -> InputState {
         InputState {
-            lookup: (0..Key::Unknown as usize).map(|_| KeyState::Released).collect()
+            lookup: vec![KeyState::Released; Key::Unknown as usize],
         }
     }
 

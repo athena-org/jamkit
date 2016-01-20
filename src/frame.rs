@@ -47,12 +47,12 @@ impl<'a> Frame<'a> {
     /// Draws the source rectangle in the texture on the frame as the destination rectangle.
     /// If None is provided for source, the full texture is drawn.
     pub fn draw(&mut self, texture: &Texture, source: Option<[i32; 4]>, destination: [i32; 4]) {
-        self.draw_many(texture, &vec![DrawData{source: source, destination: destination}]);
+        self.draw_many(texture, &[DrawData{source: source, destination: destination}]);
     }
 
     /// Performs the same action as `draw`, but many in a batched call.
     pub fn draw_many(&mut self, texture: &Texture, data: &[DrawData]) {
-        let mut vertices = Vec::<Vertex>::new();
+        let mut vertices: Vec<Vertex> = Vec::with_capacity(data.len() * 6);
 
         for entry in data {
             // Calculate this quad's vertices
@@ -80,13 +80,12 @@ impl<'a> Frame<'a> {
         };
 
         let params = glium::DrawParameters {
-            blend: {
-                let mut blend: Blend = Default::default();
-                blend.color = BlendingFunction::Addition {
+            blend: Blend {
+                color: BlendingFunction::Addition {
                     source: LinearBlendingFactor::SourceAlpha,
                     destination: LinearBlendingFactor::OneMinusSourceAlpha
-                };
-                blend
+                },
+                .. Default::default()
             },
             .. Default::default()
         };
@@ -111,13 +110,12 @@ pub struct DrawData {
 }
 
 fn get_texcoords(texture: &Texture, src: Option<[i32; 4]>) -> [f32; 4] {
-    match src {
-        Some(val) => {
-            let size = texture.get_dimensions();
+    if let Some(val) = src {
+        let size = texture.get_dimensions();
 
-            [val[0] as f32 / size[0] as f32, val[1] as f32 / size[1] as f32,
-             val[2] as f32 / size[0] as f32, val[3] as f32 / size[1] as f32]
-        },
-        None => [0.0, 0.0, 1.0, 1.0]
+        [val[0] as f32 / size[0] as f32, val[1] as f32 / size[1] as f32,
+         val[2] as f32 / size[0] as f32, val[3] as f32 / size[1] as f32]
+    } else {
+        [0.0, 0.0, 1.0, 1.0]
     }
 }
