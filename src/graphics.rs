@@ -44,7 +44,7 @@ impl Graphics {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Copy, Clone, Debug)]
 pub enum KeyState {
     Pressed,
     Released
@@ -70,7 +70,7 @@ fn map_state(state: glium::glutin::ElementState) -> KeyState {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Copy, Clone, Debug)]
 pub enum Key {
     A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
     Unknown // <= Must be last
@@ -131,16 +131,12 @@ impl<'a> Iterator for PollEventsIter<'a> {
     fn next(&mut self) -> Option<Event> {
         use glium::glutin::Event as GliumEvent;
 
-        if let Some(event) = self.iter.next() {
-            let retev = match event {
+        self.iter.next().map(|event| {
+            match event {
                 GliumEvent::Closed => Event::Closed,
                 GliumEvent::KeyboardInput(state, _, key) => Event::KeyboardInput(map_state(state), map_key(key)),
                 _ => Event::Unknown
-            };
-
-            Some(retev)
-        } else {
-            None
-        }
+            }
+        })
     }
 }
