@@ -21,15 +21,15 @@ fn main() {
         for event in display.poll_events() {
             match event {
                 jamkit::Event::Closed => break 'main,
-                jamkit::Event::KeyboardInput(state, key) => input.process_keyboard(&state, &key),
+                jamkit::Event::KeyboardInput(state, key) => input.process_keyboard(state, key),
                 _ => {}
             }
         }
 
         // Update our game state
         timer.update(|_| {
-            let a = input.get(Key::A);
-            let d = input.get(Key::D);
+            let a = input[Key::A];
+            let d = input[Key::D];
             if a.is_pressed() && d.is_released() { x -= 1; }
             if d.is_pressed() && a.is_released() { x += 1; }
         });

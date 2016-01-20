@@ -44,7 +44,7 @@ impl Graphics {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Copy, Clone, Debug)]
 pub enum KeyState {
     Pressed,
     Released
@@ -70,7 +70,7 @@ fn map_state(state: glium::glutin::ElementState) -> KeyState {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Copy, Clone, Debug)]
 pub enum Key {
     A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
     Unknown // <= Must be last
