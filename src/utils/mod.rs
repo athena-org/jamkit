@@ -1,5 +1,6 @@
 use time::{Duration, SteadyTime};
 use {Key, KeyState};
+use std::ops::Index;
 
 pub struct TickTimer {
     elapsed: Duration,
@@ -35,21 +36,20 @@ pub struct InputState {
 impl InputState {
     pub fn new() -> InputState {
         InputState {
-            lookup: (0..Key::Unknown as usize).map(|_| KeyState::Released).collect()
+            lookup: vec![KeyState::Released; Key::Unknown as usize + 1],
         }
     }
 
-    pub fn process_keyboard(&mut self, state: &KeyState, key: &Key) {
-        if let &Key::Unknown = key { return; }
+    pub fn process_keyboard(&mut self, state: KeyState, key: Key) {
+        if let Key::Unknown = key { return; }
 
-        self.lookup[key.clone() as usize] = state.clone();
+        self.lookup[key as usize] = state;
     }
+}
 
-    pub fn get(&self, key: Key) -> KeyState {
-        if let Key::Unknown = key {
-            KeyState::Released
-        } else {
-            self.lookup[key as usize].clone()
-        }
+impl Index<Key> for InputState {
+    type Output = KeyState;
+    fn index(&self, key: Key) -> &KeyState {
+        &self.lookup[key as usize]
     }
 }
