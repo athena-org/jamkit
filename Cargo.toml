@@ -1,11 +1,11 @@
 [package]
 name = "jamkit"
-version = "0.3.0"
+version = "0.3.1"
 description = "A small game development library."
 homepage = "https://github.com/athena-org/jamkit"
 repository = "https://github.com/athena-org/jamkit"
 authors = ["Layl Conway"]
-license = "MIT"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 cgmath = "0.7"
